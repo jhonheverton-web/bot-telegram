@@ -27,14 +27,13 @@ def webhook():
             "chat_id": user_chat_id,
             "text": (
                 f"Oi, {first_name} 👋\n\n"
-                "Vi que você pediu acesso ao grupo VIP.\n"
-                "Resgate seu presente aqui 👇"
+                "Clique aqui para garantir seu acesso ao meu GRUPO VIP DE VELAS ROSAS e a minha triplicagem de banca."
             ),
             "reply_markup": {
                 "inline_keyboard": [[
                     {
                         "text": "🏆 VIP EXCLUSIVO",
-                        "url": "https://SEU-LINK-AQUI.com"
+                        "url": "https://t.me/chefedoaviatooorbot?start=w52250639"
                     }
                 ]]
             }
