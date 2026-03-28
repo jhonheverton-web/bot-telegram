@@ -3,9 +3,8 @@ import requests
 import os
 
 TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = int(os.environ["CHAT_ID"])
-
 API = f"https://api.telegram.org/bot{TOKEN}"
+
 app = Flask(__name__)
 
 def tg(method, data):
@@ -14,13 +13,13 @@ def tg(method, data):
         result = r.json()
     except Exception:
         result = {"ok": False, "raw": r.text}
-    print(f"[TG] {method} -> {result}")
+    print(f"{method}: {result}")
     return result
 
 @app.route("/", methods=["POST"])
 def webhook():
     update = request.get_json(silent=True) or {}
-    print("[UPDATE]", update)
+    print("UPDATE:", update)
 
     join_req = update.get("chat_join_request")
     if join_req:
@@ -28,18 +27,13 @@ def webhook():
         user_id = user["id"]
         user_chat_id = join_req["user_chat_id"]
         first_name = user.get("first_name", "meu amigo")
-        chat_id_from_update = join_req["chat"]["id"]
-
-        print("USER_ID:", user_id)
-        print("USER_CHAT_ID:", user_chat_id)
-        print("CHAT_ID_UPDATE:", chat_id_from_update)
-        print("CHAT_ID_ENV:", CHAT_ID)
+        chat_id = join_req["chat"]["id"]
 
         tg("sendMessage", {
             "chat_id": user_chat_id,
             "text": (
                 f"Oi, {first_name} 👋\n\n"
-                "Clique aqui para garantir sua vaga no meu GRUPO VIP DE VELAS ROSAS e a TRIPLICAGEM DE BANCA, de forma 100% gratuita 👇 \n"
+                "Clique aqui para garantir sua vaga no meu GRUPO VIP DE VELAS ROSAS e a TRIPLICAGEM DE BANCA, de forma 100% gratuita 👇"
             ),
             "reply_markup": {
                 "inline_keyboard": [[
@@ -51,14 +45,9 @@ def webhook():
             }
         })
 
-        approve_result = tg("approveChatJoinRequest", {
-            "chat_id": chat_id_from_update,
+        tg("approveChatJoinRequest", {
+            "chat_id": chat_id,
             "user_id": user_id
         })
 
-        print("APPROVE RESULT:", approve_result)
-
     return "ok", 200
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
