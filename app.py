@@ -33,7 +33,7 @@ def webhook():
             "chat_id": user_chat_id,
             "text": (
                 f"Oi, {first_name} 👋\n\n"
-                "Clique aqui para garantir sua vaga no meu GRUPO VIP DE VELAS ROSAS e a TRIPLICAGEM DE BANCA, de forma 100% gratuita 👇"
+                "Clique aqui para garantir sua vaga no meu GRUPO VIP DE VELAS ROSAS e a TRIPLICAGEM DE BANCA, de forma 100% gratuita👇"
             ),
             "reply_markup": {
                 "inline_keyboard": [[
