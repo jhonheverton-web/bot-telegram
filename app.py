@@ -32,7 +32,7 @@ def webhook():
                 "inline_keyboard": [[
                     {
                         "text": "🏆 VIP EXCLUSIVO",
-                        "url": "https://t.me/chefedoaviatooorbot?start=w52250639"
+                        "url": "https://t.me/chefedoaviatooorbot?start=w52112396"
                     }
                 ]]
             }
