@@ -10,11 +10,17 @@ app = Flask(__name__)
 
 def tg(method, data):
     r = requests.post(f"{API}/{method}", json=data, timeout=20)
-    return r.json()
+    try:
+        result = r.json()
+    except Exception:
+        result = {"ok": False, "raw": r.text}
+    print(f"[TG] {method} -> {result}")
+    return result
 
 @app.route("/", methods=["POST"])
 def webhook():
     update = request.get_json(silent=True) or {}
+    print("[UPDATE]", update)
 
     join_req = update.get("chat_join_request")
     if join_req:
@@ -22,11 +28,18 @@ def webhook():
         user_id = user["id"]
         user_chat_id = join_req["user_chat_id"]
         first_name = user.get("first_name", "meu amigo")
+        chat_id_from_update = join_req["chat"]["id"]
+
+        print("USER_ID:", user_id)
+        print("USER_CHAT_ID:", user_chat_id)
+        print("CHAT_ID_UPDATE:", chat_id_from_update)
+        print("CHAT_ID_ENV:", CHAT_ID)
 
         tg("sendMessage", {
             "chat_id": user_chat_id,
             "text": (
-                f"Oi, {first_name} \n\n" "Clique aqui para garantir sua vaga no meu GRUPO VIP DE VELAS ROSAS e a TRIPLICAGEM DE BANCA, de forma 100% gratuita 👇"
+                f"Oi, {first_name} 👋\n\n"
+                "Clique aqui para garantir sua vaga no meu GRUPO VIP DE VELAS ROSAS e a TRIPLICAGEM DE BANCA, de forma 100% gratuita 👇 \n"
             ),
             "reply_markup": {
                 "inline_keyboard": [[
@@ -38,10 +51,12 @@ def webhook():
             }
         })
 
-        tg("approveChatJoinRequest", {
-            "chat_id": CHAT_ID,
+        approve_result = tg("approveChatJoinRequest", {
+            "chat_id": chat_id_from_update,
             "user_id": user_id
         })
+
+        print("APPROVE RESULT:", approve_result)
 
     return "ok", 200
 
