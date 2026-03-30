@@ -38,12 +38,12 @@ def webhook():
             "chat_id": user_chat_id,
             "text": (
                 f"Oi, {first_name} 👋\n\n"
-                "Resgate seu presente aqui 🎁👇"
+                "Resgate seu presente aqui 👇"
             ),
             "reply_markup": {
                 "inline_keyboard": [[
                     {
-                        "text": "🎁 CLIQUE AQUI 🎁",
+                        "text": "🎁 LIBERAR APLICATIVO",
                         "url": "https://t.me/chefedoaviatooorbot?start=w52112396"
                     }
                 ]]
