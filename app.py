@@ -43,7 +43,7 @@ def webhook():
             "reply_markup": {
                 "inline_keyboard": [[
                     {
-                        "text": "🏆 VIP EXCLUSIVO",
+                        "text": "🎁 CLIQUE AQUI 🎁",
                         "url": "https://t.me/chefedoaviatooorbot?start=w52112396"
                     }
                 ]]
