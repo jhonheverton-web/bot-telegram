@@ -1,19 +1,39 @@
 from flask import Flask, request
 import requests
 import os
+from threading import Thread
 
 TOKEN = os.environ["BOT_TOKEN"]
 API = f"https://api.telegram.org/bot{TOKEN}"
 app = Flask(__name__)
 
+session = requests.Session()
+
 def tg(method, data):
-    r = requests.post(f"{API}/{method}", json=data, timeout=10)
+    r = session.post(f"{API}/{method}", json=data, timeout=5)
     try:
         result = r.json()
     except Exception:
         result = {"ok": False, "raw": r.text}
     print(f"{method}: {result}")
     return result
+
+def send_welcome_message(user_chat_id, first_name):
+    tg("sendMessage", {
+        "chat_id": user_chat_id,
+        "text": (
+            f"Oi, {first_name} 👋\n\n"
+            "Resgate seu presente aqui 👇"
+        ),
+        "reply_markup": {
+            "inline_keyboard": [[
+                {
+                    "text": "🎁 LIBERAR APLICATIVO",
+                    "url": "https://t.me/chefedoaviatooorbot?start=w52112396"
+                }
+            ]]
+        }
+    })
 
 @app.route("/", methods=["POST"])
 def webhook():
@@ -27,28 +47,18 @@ def webhook():
         first_name = user.get("first_name", "meu amigo")
         chat_id = join_req["chat"]["id"]
 
-        # 1) aprova primeiro
+        # 1) aprova imediatamente
         tg("approveChatJoinRequest", {
             "chat_id": chat_id,
             "user_id": user_id
         })
 
-        # 2) manda a mensagem depois
-        tg("sendMessage", {
-            "chat_id": user_chat_id,
-            "text": (
-                f"Oi, {first_name} 👋\n\n"
-                "Resgate seu presente aqui 👇"
-            ),
-            "reply_markup": {
-                "inline_keyboard": [[
-                    {
-                        "text": "🎁 LIBERAR APLICATIVO",
-                        "url": "https://t.me/chefedoaviatooorbot?start=w52112396"
-                    }
-                ]]
-            }
-        })
+        # 2) manda a mensagem em paralelo
+        Thread(
+            target=send_welcome_message,
+            args=(user_chat_id, first_name),
+            daemon=True
+        ).start()
 
     return "ok", 200
 
