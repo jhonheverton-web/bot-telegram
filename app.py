@@ -22,14 +22,17 @@ def send_welcome_message(user_chat_id, first_name):
     tg("sendMessage", {
         "chat_id": user_chat_id,
         "text": (
-            f"Oi, {first_name} 👋\n\n"
-            "Resgate seu presente aqui 👇"
+            f"Fala, {first_name}, seja muito bem-vindo ao meu canal de ODDS ALTAS!!⚡️
+
+🎁 Pra começar com o pé direito, vou te dar a oportunidade de participar do meu grupo de alavancagem totalmente de graça!
+
+👇 Clique no botão abaixo e garanta sua participação agora mesmo!"
         ),
         "reply_markup": {
             "inline_keyboard": [[
                 {
-                    "text": "🎁 LIBERAR APLICATIVO",
-                    "url": "https://t.me/chefedoaviatooorbot?start=w52112396"
+                    "text": "🎁 RESGATAR PRESENTE",
+                    "url": "https://t.me/Jhontipss_bot?start=w52112396"
                 }
             ]]
         }
