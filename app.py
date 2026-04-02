@@ -1,69 +1,33 @@
-from flask import Flask, request
-import requests
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 import os
-from threading import Thread
 
-TOKEN = os.environ["BOT_TOKEN"]
-API = f"https://api.telegram.org/bot{TOKEN}"
-app = Flask(__name__)
+TOKEN = os.getenv("BOT_TOKEN")
 
-session = requests.Session()
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    first_name = update.effective_user.first_name or "meu amigo"
 
-def tg(method, data):
-    r = session.post(f"{API}/{method}", json=data, timeout=5)
-    try:
-        result = r.json()
-    except Exception:
-        result = {"ok": False, "raw": r.text}
-    print(f"{method}: {result}")
-    return result
-
-def send_welcome_message(user_chat_id, first_name):
-    tg("sendMessage", {
-        "chat_id": user_chat_id,
-        "text": (
-            f"Fala, {first_name}, seja muito bem-vindo ao meu canal de ODDS ALTAS!!⚡️
+    mensagem = f"""👋 Fala {first_name}, seja muito bem-vindo ao meu canal de ODDS ALTAS!!⚡️
 
 🎁 Pra começar com o pé direito, vou te dar a oportunidade de participar do meu grupo de alavancagem totalmente de graça!
 
-👇 Clique no botão abaixo e garanta sua participação agora mesmo!"
-        ),
-        "reply_markup": {
-            "inline_keyboard": [[
-                {
-                    "text": "🎁 RESGATAR PRESENTE",
-                    "url": "https://t.me/Jhontipss_bot?start=w52112396"
-                }
-            ]]
-        }
-    })
+👇 Clique no botão abaixo e garanta sua participação agora mesmo!"""
 
-@app.route("/", methods=["POST"])
-def webhook():
-    update = request.get_json(silent=True) or {}
-    join_req = update.get("chat_join_request")
+    keyboard = [
+        [InlineKeyboardButton("🎁 RESGATAR PRESENTE", url="https://t.me/Jhontipss_bot?start=w52112396")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
 
-    if join_req:
-        user = join_req["from"]
-        user_id = user["id"]
-        user_chat_id = join_req["user_chat_id"]
-        first_name = user.get("first_name", "meu amigo")
-        chat_id = join_req["chat"]["id"]
+    await update.message.reply_text(mensagem, reply_markup=reply_markup)
 
-        # 1) aprova imediatamente
-        tg("approveChatJoinRequest", {
-            "chat_id": chat_id,
-            "user_id": user_id
-        })
+def main():
+    if not TOKEN:
+        raise ValueError("A variável BOT_TOKEN não foi configurada no Render.")
 
-        # 2) manda a mensagem em paralelo
-        Thread(
-            target=send_welcome_message,
-            args=(user_chat_id, first_name),
-            daemon=True
-        ).start()
-
-    return "ok", 200
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    print("Bot rodando...")
+    app.run_polling()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    main()
