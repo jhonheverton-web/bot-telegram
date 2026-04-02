@@ -14,7 +14,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 👇 Clique no botão abaixo e garanta sua participação agora mesmo!"""
 
     keyboard = [
-        [InlineKeyboardButton("🎁 RESGATAR PRESENTE", url="https://t.me/Jhontipss_bot?start=w52112396")]
+        [InlineKeyboardButton("🎁 GARANTIR PARTICIPAÇÃO", url="https://t.me/Jhontipss_bot?start=w52112396")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
@@ -22,12 +22,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     if not TOKEN:
-        raise ValueError("A variável BOT_TOKEN não foi configurada no Render.")
+        raise ValueError("BOT_TOKEN não configurado.")
 
-    app = Application.builder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
+    application = Application.builder().token(TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
+
     print("Bot rodando...")
-    app.run_polling()
+    application.run_polling()
 
 if __name__ == "__main__":
     main()
