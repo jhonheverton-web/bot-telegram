@@ -14,14 +14,15 @@ LINK_BOTAO = "https://t.me/Jhontipss_bot?start=w52112396"
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     first_name = update.effective_user.first_name or "meu amigo"
 
-    mensagem = f"""👋 Fala {first_name}, seja muito bem-vindo ao meu canal de ODDS ALTAS!!⚡️
+    mensagem = f"""Fala jogador! 👊
 
-🎁 Pra começar com o pé direito, vou te dar a oportunidade de participar do meu grupo de alavancagem totalmente de graça!
+Já vou liberar seu acesso ao MAIOR GRUPO DE APOSTAS ESPORTIVAS DO BRASIL!
 
-👇 Clique no botão abaixo e resgate seu presente agora mesmo!"""
+A única coisa que você PRECISA fazer é seguir um simples passo a passo..
+E logo em seguida, vou liberar um presente especial só pra você"""
 
     keyboard = [
-        [InlineKeyboardButton("🎁 RESGATAR PRESENTE", url=LINK_BOTAO)]
+        [InlineKeyboardButton("LIBERAR PRESENTE ESPECIAL 🎁", url=LINK_BOTAO)]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
