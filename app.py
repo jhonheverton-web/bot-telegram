@@ -9,7 +9,8 @@ import os
 
 TOKEN = os.getenv("BOT_TOKEN")
 
-LINK_BOTAO = "https://t.me/Jhontipss_bot?start=w52112396"
+# LINK ATUALIZADO
+LINK_BOTAO = "https://t.me/Jhontipssbot?start=w52972625"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     first_name = update.effective_user.first_name or "meu amigo"
